@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ดูสายพันธุ์หมา</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>อัปโหลดรูปหมา</h1>
+
+  <form action="/predict" method="post" enctype="multipart/form-data">
+    <input type="file" name="images" multiple required><br><br>
+    <input type="submit" value="ดูสายพันธุ์หมา">
+    <button type="button" onclick="window.location.href='/'" class="reset">รีเซ็ต</button>
+  </form>
+
+  {% if results %}
+    <hr>
+    {% for item in results %}
+      <div class="result-block">
+        <img src="{{ item.image_url }}" width="300"><br>
+        <h3>Top 5 สายพันธุ์ที่ทำนาย:</h3>
+        <ol>
+          {% for name in item.top5 %}
+            <li>{{ name }}</li>
+          {% endfor %}
+        </ol>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div id="loading" style="display:none;">🔄 กำลังวิเคราะห์...</div>
+<script>
+  document.querySelector("form").addEventListener("submit", function() {
+    document.getElementById("loading").style.display = "block";
+  });
+</script>
+
+
+</body>
+</html>
